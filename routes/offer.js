@@ -1,5 +1,8 @@
+// Import du package 'express'
 const express = require("express")
+// Appel à la fonction Router(), issue du package 'express'
 const router = express.Router()
+// Import du package cloudinary
 const cloudinary = require("cloudinary").v2
 
 //import du modèle User et Offer
@@ -126,7 +129,7 @@ router.get("/offers", async (req, res) => {
 			.sort(sortObject)
 			.skip((page - 1) * limit)
 			.limit(limit)
-		// .select("product_name product_price")
+			.select("product_name product_price")
 
 		// cette ligne va nous retourner le nombre d'annonces trouvées en fonction des filtres
 		const count = await Offer.countDocuments(filtersObject)
