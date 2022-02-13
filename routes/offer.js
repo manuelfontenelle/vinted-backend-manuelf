@@ -109,10 +109,10 @@ router.get("/offers", async (req, res) => {
 		//(1-1) * 5 = skip 0 résultat => PAGE 1
 		//(2-1) * 5 = SKIP 5 RÉSULTAT => page 2
 		//(4-1) * 5 = skip 15 résultats => page 4
-		let limit = 3
-		if (req.query.limit) {
-			limit = req.query.limit
-		}
+		// let limit = 3
+		// if (req.query.limit) {
+		// 	limit = req.query.limit
+		// }
 		// let limit = 3;
 
 		let page = 1
@@ -120,6 +120,7 @@ router.get("/offers", async (req, res) => {
 			page = req.query.page
 		}
 		// let page = 1;
+		let limit = Number(req.query.limit)
 
 		const offers = await Offer.find(filtersObject)
 			.populate({
