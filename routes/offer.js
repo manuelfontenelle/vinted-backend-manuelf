@@ -127,7 +127,7 @@ router.get("/offers", async (req, res) => {
 				select: "account",
 			})
 			.sort(sortObject)
-			.skip((page - 1) * limit)
+			// .skip((page - 1) * limit)
 			.limit(limit)
 		// .select("product_name product_price")
 
