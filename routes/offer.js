@@ -6,8 +6,8 @@ const router = express.Router()
 const cloudinary = require("cloudinary").v2
 
 //import du modèle User et Offer
-const User = require("../models/User")
 const Offer = require("../models/Offer")
+const User = require("../models/User")
 
 // Import du middleware isAuthenticated
 const isAuthenticated = require("../middleware/isAuthenticated")
@@ -66,77 +66,83 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
 })
 
 router.get("/offers", async (req, res) => {
-	let filtersObject = {}
+	try {
+		let filtersObject = {}
 
-	//Gestion du Title
-	if (req.query.title) {
-		filtersObject.product_name = new RegExp(req.query.title, "i")
-	}
-
-	if (req.query.priceMin) {
-		filtersObject.product_price = {
-			$gte: req.query.priceMin,
+		//Gestion du Title
+		if (req.query.title) {
+			filtersObject.product_name = new RegExp(req.query.title, "i")
 		}
-	}
 
-	if (req.query.priceMax) {
-		if (filtersObject.product_price) {
-			filtersObject.product_price.$lte = req.query.priceMax
-		} else {
+		if (req.query.priceMin) {
 			filtersObject.product_price = {
-				$lte: req.query.priceMax,
+				$gte: req.query.priceMin,
 			}
 		}
-	}
 
-	console.log(filtersObject)
+		if (req.query.priceMax) {
+			if (filtersObject.product_price) {
+				filtersObject.product_price.$lte = req.query.priceMax
+			} else {
+				filtersObject.product_price = {
+					$lte: req.query.priceMax,
+				}
+			}
+		}
 
-	//Gestion du tri avec l'objet sortObject
-	const sortObject = {}
-	if (req.query.sort === "price-desc") {
-		sortObject.product_price = "desc"
-	} else if (req.query.sort === "price-asc") {
-		sortObject.product_price = "asc"
-	}
+		console.log(filtersObject)
 
-	//gestion de la pagination
-	//On a pas défaut 5 annonces par pages
-	//Si ma page est égale à 1 je devrais skip 0 annonces
-	//Si ma page est égale à 2 je devrais skip 5 annonces
-	//Si ma page est égale à 4 je devrais skip 15 annonces
+		//Gestion du tri avec l'objet sortObject
+		const sortObject = {}
+		if (req.query.sort === "price-desc") {
+			sortObject.product_price = "desc"
+		} else if (req.query.sort === "price-asc") {
+			sortObject.product_price = "asc"
+		}
 
-	//(1-1) * 5 = skip 0 résultat => PAGE 1
-	//(2-1) * 5 = SKIP 5 RÉSULTAT => page 2
-	//(4-1) * 5 = skip 15 résultats => page 4
+		//gestion de la pagination
+		//On a pas défaut 5 annonces par pages
+		//Si ma page est égale à 1 je devrais skip 0 annonces
+		//Si ma page est égale à 2 je devrais skip 5 annonces
+		//Si ma page est égale à 4 je devrais skip 15 annonces
 
-	let limit = Number(req.query.limit)
-	// let limit = 3;
+		//(1-1) * 5 = skip 0 résultat => PAGE 1
+		//(2-1) * 5 = SKIP 5 RÉSULTAT => page 2
+		//(4-1) * 5 = skip 15 résultats => page 4
+		let limit
+		limit = Number(req.query.limit)
+		// let limit = 3;
 
-	let page
-	if (Number(req.query.page) < 1) {
-		page = 1
-	} else {
-		page = Number(req.query.page)
-	}
-	// let page = 1;
+		let page
+		if (Number(req.query.page) < 1) {
+			page = 1
+		} else {
+			page = Number(req.query.page)
+		}
+		// let page = 1;
 
-	const offers = await Offer.find(filtersObject)
-		.populate({
-			path: "owner",
-			select: "account",
+		const offers = await Offer.find(filtersObject)
+			// .populate({
+			// 	path: "owner",
+			// 	select: "account",
+			// })
+			.sort(sortObject)
+			.skip((page - 1) * limit)
+			.limit(limit)
+			.select("product_name product_price")
+
+		// cette ligne va nous retourner le nombre d'annonces trouvées en fonction des filtres
+		const count = await Offer.countDocuments(filtersObject)
+
+		res.json({
+			count: count,
+			offers: offers,
 		})
-		.sort(sortObject)
-		.skip((page - 1) * limit)
-		.limit(limit)
-		.select("product_name product_price")
-
-	// cette ligne va nous retourner le nombre d'annonces trouvées en fonction des filtres
-	const count = await Offer.countDocuments(filtersObject)
-
-	res.json({
-		count: count,
-		offers: offers,
-	})
+	} catch (error) {
+		//Mon objet filtersObject viendra récupérer les différentds filtres
+		console.log(error.message)
+		res.status(400).json({ message: error.message })
+	}
 })
 
 router.get("/offer/:id", async (req, res) => {
