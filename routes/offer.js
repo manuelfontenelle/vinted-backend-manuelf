@@ -114,13 +114,16 @@ router.get("/offers", async (req, res) => {
 		// 	limit = req.query.limit
 		// }
 		// let limit = 3;
+		let limit
+		if (req.query.limit) {
+			limit = req.query.limit
+		}
 
 		let page = 1
 		if (req.query.page) {
 			page = req.query.page
 		}
 		// let page = 1;
-		let limit = Number(req.query.limit)
 
 		const offers = await Offer.find(filtersObject)
 			.populate({
