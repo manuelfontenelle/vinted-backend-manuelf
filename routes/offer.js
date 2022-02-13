@@ -115,11 +115,9 @@ router.get("/offers", async (req, res) => {
 		}
 		// let limit = 3;
 
-		let page
-		if (Number(req.query.page) < 1) {
-			page = 1
-		} else {
-			page = Number(req.query.page)
+		let page = 1
+		if (req.query.page) {
+			page = req.query.page
 		}
 		// let page = 1;
 
