@@ -1,15 +1,16 @@
 const express = require("express")
-const formidable = require("express-formidable")
 const mongoose = require("mongoose")
+const formidable = require("express-formidable")
 const cors = require("cors")
-const cloudinary = require("cloudinary").v2
-
 //création du serveur
 const app = express()
-//permet d'autoriser tous les sites a appeler votre API
-app.use(cors())
+
+const cloudinary = require("cloudinary").v2
 //Permet de gérer les requettes POST
 app.use(formidable())
+//permet d'autoriser tous les sites a appeler votre API
+app.use(cors())
+
 // Permet l'accès aux variables d'environnement
 require("dotenv").config()
 
@@ -29,8 +30,13 @@ const usersRoutes = require("./routes/user")
 const offersRoutes = require("./routes/offer")
 app.use(usersRoutes)
 app.use(offersRoutes)
+
 app.get("/", (req, res) => {
-	res.json("Bienvenue sur l'API de Vinted !!")
+	res.json("Bienvenue sur l'API de Vinted")
+})
+
+app.use(function (err, req, res, next) {
+	res.json({ error: err.message })
 })
 
 app.listen(process.env.PORT, () => {
