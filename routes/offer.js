@@ -127,9 +127,9 @@ router.get("/offers", async (req, res) => {
 				select: "account",
 			})
 			.sort(sortObject)
-			// .skip((page - 1) * limit)
+			.skip((page - 1) * limit)
 			.limit(limit)
-		// .select("product_name product_price")
+			.select("product_name product_price")
 
 		// cette ligne va nous retourner le nombre d'annonces trouvées en fonction des filtres
 		const count = await Offer.countDocuments(filtersObject)
