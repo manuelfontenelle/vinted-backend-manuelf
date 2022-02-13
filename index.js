@@ -30,7 +30,7 @@ const offersRoutes = require("./routes/offer")
 app.use(usersRoutes)
 app.use(offersRoutes)
 app.get("/", (req, res) => {
-	res.json("Bienvenue sur l'API de Vinted")
+	res.json("Bienvenue sur l'API de Vinted !!")
 })
 
 app.listen(process.env.PORT, () => {
