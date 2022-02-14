@@ -109,13 +109,13 @@ router.get("/offers", async (req, res) => {
 		//(1-1) * 5 = skip 0 résultat => PAGE 1
 		//(2-1) * 5 = SKIP 5 RÉSULTAT => page 2
 		//(4-1) * 5 = skip 15 résultats => page 4
-		let limit = 1
+		let limit
 		limit = Number(req.query.limit)
 		// let limit = 3
 		// if (req.query.limit) {
 		// 	limit = req.query.limit
 		// }
-		let page = 1
+		let page
 		if (Number(req.query.page) < 1) {
 			page = 1
 		} else {
@@ -132,8 +132,8 @@ router.get("/offers", async (req, res) => {
 				select: "account",
 			})
 			.sort(sortObject)
-		// .skip((page - 1) * limit)
-		// .limit(limit)
+			.skip((page - 1) * limit)
+			.limit(limit)
 		// .select("product_name product_price")
 
 		// cette ligne va nous retourner le nombre d'annonces trouvées en fonction des filtres
