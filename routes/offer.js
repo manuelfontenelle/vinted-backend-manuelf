@@ -111,20 +111,20 @@ router.get("/offers", async (req, res) => {
 		//(4-1) * 5 = skip 15 résultats => page 4
 		// let limit = 0
 		// limit = Number(req.query.limit)
-		let limit = 1
+		let limit = 0
 		if (req.query.limit) {
 			limit = Number(req.query.limit)
 		}
-		// let page = 1
-		// if (Number(req.query.page) < 1) {
-		// 	page = 1
-		// } else {
-		// 	page = Number(req.query.page)
-		// }
 		let page = 1
-		if (req.query.page) {
-			page = req.query.page
+		if (Number(req.query.page) < 1) {
+			page = 1
+		} else {
+			page = Number(req.query.page)
 		}
+		// let page = 1
+		// if (req.query.page) {
+		// 	page = req.query.page
+		// }
 
 		const offers = await Offer.find(filtersObject)
 			.populate({
