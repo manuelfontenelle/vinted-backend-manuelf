@@ -111,7 +111,7 @@ router.get("/offers", async (req, res) => {
 		//(4-1) * 5 = skip 15 résultats => page 4
 		// let limit = 0
 		// limit = Number(req.query.limit)
-		let limit = 0
+		let limit = 1
 		if (req.query.limit) {
 			limit = Number(req.query.limit)
 		}
