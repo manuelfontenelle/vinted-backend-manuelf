@@ -35,17 +35,21 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
 			})
 
 			// Envoi de l'image à cloudinary
-			const result = await cloudinary.uploader.unsigned_upload(
-				req.files.picture.path,
-				"ml_default",
-				{
-					folder: `api/vinted/offers/${newOffer._id}`,
-					// public_id: "preview",
-					// public_id: `preview + ${newOffer._id}`,
-					public_id: `${newOffer._id}`,
-					cloud_name: "manuelf-cloudinary",
-				}
-			)
+			// const result = await cloudinary.uploader.unsigned_upload(
+			// 	req.files.picture.path,
+			// 	"ml_default",
+			// 	{
+			// 		folder: `api/vinted/offers/${newOffer._id}`,
+			// 		// public_id: "preview",
+			// 		// public_id: `preview + ${newOffer._id}`,
+			// 		public_id: `${newOffer._id}`,
+			// 		cloud_name: "manuelf-cloudinary",
+			// 	}
+			// )
+
+			const result = await cloudinary.uploader.upload(req.files.picture.path, {
+				folder: "/vinted",
+			})
 			// console.log(result);
 			newOffer.product_image = result
 
