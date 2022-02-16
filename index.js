@@ -29,8 +29,10 @@ cloudinary.config({
 //import des routes users et offers
 const usersRoutes = require("./routes/user")
 const offersRoutes = require("./routes/offer")
+const paymentRoutes = require("./routes/payment")
 app.use(usersRoutes)
 app.use(offersRoutes)
+app.use(paymentRoutes)
 
 app.get("/", (req, res) => {
 	res.json("Bienvenue sur l'API de Vinted")
