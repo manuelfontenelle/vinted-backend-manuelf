@@ -7,7 +7,7 @@ const cloudinary = require("cloudinary").v2
 
 //import du modèle User et Offer
 const Offer = require("../models/Offer")
-const User = require("../models/User")
+// const User = require("../models/User")
 
 // Import du middleware isAuthenticated
 const isAuthenticated = require("../middleware/isAuthenticated")

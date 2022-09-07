@@ -1,6 +1,9 @@
 const express = require("express")
 const router = express.Router()
 
+// Import du package cloudinary
+const cloudinary = require("cloudinary").v2
+
 const SHA256 = require("crypto-js/sha256")
 const encBase64 = require("crypto-js/enc-base64")
 const uid2 = require("uid2")
@@ -35,10 +38,21 @@ router.post("/user/signup", async (req, res) => {
 						username: req.fields.username,
 						phone: req.fields.phone,
 					},
+					newsletter: req.fields.newsletter,
 					token: token,
 					hash: hash,
 					salt: salt,
 				})
+
+				// const result = await cloudinary.uploader.upload(
+				// 	req.files.picture.path,
+				// 	{
+				// 		folder: "/avatars",
+				// 	}
+				// )
+
+				// console.log(result);
+				// newUser.avatar = result
 
 				// Etape 3 : sauvegarder ce nouvel utilisateur dans la bdd
 				await newUser.save()
@@ -47,6 +61,7 @@ router.post("/user/signup", async (req, res) => {
 					email: newUser.email,
 					token: newUser.token,
 					account: newUser.account,
+					// avatar: newUser.avatar,
 				})
 			}
 		}
