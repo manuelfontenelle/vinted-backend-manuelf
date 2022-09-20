@@ -17,7 +17,7 @@ router.post("/user/signup", async (req, res) => {
 		if (req.fields.username === undefined) {
 			res.status(400).json({ message: "Missing parameter" })
 		} else {
-			//On véirifie que l'emaikl en base de données soit bien disponible
+			//On véirifie que l'email en base de données soit bien disponible
 			const isUserExist = await User.findOne({ email: req.fields.email })
 			if (isUserExist !== null) {
 				res.status(400).json({ message: "This email already has an account" })
@@ -37,6 +37,7 @@ router.post("/user/signup", async (req, res) => {
 					account: {
 						username: req.fields.username,
 						phone: req.fields.phone,
+						// avatar: result,
 					},
 					newsletter: req.fields.newsletter,
 					token: token,
@@ -44,15 +45,13 @@ router.post("/user/signup", async (req, res) => {
 					salt: salt,
 				})
 
-				// const result = await cloudinary.uploader.upload(
-				// 	req.files.picture.path,
-				// 	{
-				// 		folder: "/avatars",
-				// 	}
-				// )
-
+				const result = await cloudinary.uploader.upload(req.files.avatar.path, {
+					folder: "/avatar",
+				})
 				// console.log(result);
-				// newUser.avatar = result
+				newUser.account.avatar = result
+
+				// await newOffer.save()
 
 				// Etape 3 : sauvegarder ce nouvel utilisateur dans la bdd
 				await newUser.save()
@@ -61,7 +60,7 @@ router.post("/user/signup", async (req, res) => {
 					email: newUser.email,
 					token: newUser.token,
 					account: newUser.account,
-					// avatar: newUser.avatar,
+					avatar: newUser.avatar,
 				})
 			}
 		}
