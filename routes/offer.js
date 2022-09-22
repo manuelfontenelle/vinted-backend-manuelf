@@ -18,7 +18,12 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
 		const { title, description, price, brand, size, condition, color, city } =
 			req.fields
 
-		console.log(req.fields)
+		console.log(
+			"req.fields ===>",
+			req.fields,
+			"req files ===>",
+			req.files.picture.path
+		)
 		if (title && price && req.files.picture.path) {
 			const newOffer = new Offer({
 				product_name: req.fields.title,

@@ -22,7 +22,11 @@ router.post("/user/signup", async (req, res) => {
 			if (isUserExist !== null) {
 				res.status(400).json({ message: "This email already has an account" })
 			} else {
-				console.log(req.fields)
+				console.log(
+					"req.fields ET req.files ==== >",
+					req.fields,
+					req.files.avatar.path
+				)
 
 				//Etape 1 : hasher le mot de passe
 				const salt = uid2(64)
@@ -44,14 +48,16 @@ router.post("/user/signup", async (req, res) => {
 					hash: hash,
 					salt: salt,
 				})
-
-				const result = await cloudinary.uploader.upload(req.files.avatar.path, {
-					folder: "/avatar",
-				})
-				// console.log(result);
-				newUser.account.avatar = result
-
-				// await newOffer.save()
+				if (req.files.avatar) {
+					const result = await cloudinary.uploader.upload(
+						req.files.avatar.path,
+						{
+							folder: "/avatar",
+						}
+					)
+					// console.log(result);
+					newUser.account.avatar = result
+				}
 
 				// Etape 3 : sauvegarder ce nouvel utilisateur dans la bdd
 				await newUser.save()
@@ -60,7 +66,7 @@ router.post("/user/signup", async (req, res) => {
 					email: newUser.email,
 					token: newUser.token,
 					account: newUser.account,
-					avatar: newUser.avatar,
+					// avatar: newUser.avatar,
 				})
 			}
 		}
