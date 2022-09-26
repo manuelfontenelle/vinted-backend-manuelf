@@ -52,7 +52,7 @@ router.post("/user/signup", async (req, res) => {
 					const result = await cloudinary.uploader.upload(
 						req.files.avatar.path,
 						{
-							folder: "/avatar",
+							folder: "/vinted/avatars",
 						}
 					)
 					// console.log(result);
