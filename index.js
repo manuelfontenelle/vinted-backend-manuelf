@@ -15,7 +15,7 @@ app.use(cors())
 require("dotenv").config()
 
 //connexion à la bdd
-// mongoose.connect("mongodb://localhost/vinted");
+// mongoose.connect("mongodb://localhost/vinted")
 mongoose.connect(process.env.MONGODB_URI)
 
 // Connexion à l'espace de stockage cloudinary

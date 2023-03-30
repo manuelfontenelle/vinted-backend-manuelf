@@ -14,6 +14,7 @@ const User = require("../models/User")
 router.post("/user/signup", async (req, res) => {
 	try {
 		//On vérifie qu'on envoie bien un username
+
 		if (req.fields.username === undefined) {
 			res.status(400).json({ message: "Missing parameter" })
 		} else {
@@ -22,11 +23,10 @@ router.post("/user/signup", async (req, res) => {
 			if (isUserExist !== null) {
 				res.status(400).json({ message: "This email already has an account" })
 			} else {
-				console.log(
-					"req.fields ET req.files ==== >",
-					req.fields,
-					req.files.avatar.path
-				)
+				console.log("req.fields ET req.files ==== >", req.fields)
+				if (req.files.avatar) {
+					console.log("req.files ==== >", req.files.avatar.path)
+				}
 
 				//Etape 1 : hasher le mot de passe
 				const salt = uid2(64)
@@ -71,6 +71,7 @@ router.post("/user/signup", async (req, res) => {
 			}
 		}
 	} catch (error) {
+		console.log("heloooo")
 		res.status(400).json({ error: error.message })
 	}
 })
