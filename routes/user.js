@@ -71,7 +71,7 @@ router.post("/user/signup", async (req, res) => {
 			}
 		}
 	} catch (error) {
-		console.log("heloooo")
+		// console.log("heloooo")
 		res.status(400).json({ error: error.message })
 	}
 })
